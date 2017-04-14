@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# We want to run the container & automtically remove it after it has stopped.
+CMD="docker run --rm";
+
+# The container is interactive but does not always need to get a pseudo tty.
+[[ -t 1 ]] && TTY="-i" || TTY="-it"; CMD="$CMD $TTY";
+
+# Setup the container to run as the same user as our host system.
+CMD="$CMD -e HOST_USER_ID=`id -u` -e HOST_GROUP_ID=`id -g` -v $HOME:/home/user";
+
+# Ensure the working directory inside the container is the same as it is
+# on the host system, obviously this is restricted to with-in /home.
+pwd=`pwd`; CMD="$CMD -w ${pwd/$USER/user}";
+
+# Make the container use the hosts network stack. This will ensure any
+# applications that expose network ports can easily be accessed from the host.
+CMD="$CMD --net host";
+
+# Run the approriate tagged container.
+CMD="$CMD bradjones/dotnet:latest";
+
+# Execute dotnet inside the container
+# Proxying all other arguments on to dotnet
+CMD="$CMD dotnet $@";
+
+# Finally execute the built command.
+$CMD;

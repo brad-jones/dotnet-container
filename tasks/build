@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+self=$(readlink -f $0); tasks=`dirname ${self}`; projectRoot=`dirname ${tasks}`;
+docker build -t bradjones/dotnet -f Dockerfile.dotnet $projectRoot
+docker build -t bradjones/dotnet-ide -f Dockerfile.dotnet-ide $projectRoot
+docker build -t bradjones/dotnet-vscode -f Dockerfile.dotnet-vscode $projectRoot
+docker build -t bradjones/dotnet-rider -f Dockerfile.dotnet-rider $projectRoot

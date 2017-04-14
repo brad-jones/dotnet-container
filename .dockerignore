@@ -1,0 +1,11 @@
+.git
+.gitignore
+.gitattributes
+Dockerfile.dotnet
+Dockerfile.dotnet-ide
+Dockerfile.dotnet-rider
+Dockerfile.dotnet-vscode
+LICENSE
+README.md
+bin
+tasks

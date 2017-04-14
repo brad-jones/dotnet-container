@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+self=$(readlink -f $0); tasks=`dirname ${self}`; projectRoot=`dirname ${tasks}`;
+cp $projectRoot/bin/dotnet ~/.local/bin/dotnet && chmod +x ~/.local/bin/dotnet
+cp $projectRoot/bin/code ~/.local/bin/code && chmod +x ~/.local/bin/code
+cp $projectRoot/bin/rider ~/.local/bin/rider && chmod +x ~/.local/bin/rider
