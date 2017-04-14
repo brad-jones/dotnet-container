@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+self=$(readlink -f $0); tasks=`dirname ${self}`; projectRoot=`dirname ${tasks}`;
+
+# Grab version info for the various pieces of software
+echo "Reading software versions from built containers...";
+GID=`id -g`;
+DOTNET_V=`docker run --rm -e HOST_USER_ID=$UID -e HOST_GROUP_ID=$GID bradjones/dotnet:latest dotnet`
+NODE_V=`docker run --rm -e HOST_USER_ID=$UID -e HOST_GROUP_ID=$GID bradjones/dotnet-ide:latest node -v`
+TYPESCRIPT_V=`docker run --rm -e HOST_USER_ID=$UID -e HOST_GROUP_ID=$GID bradjones/dotnet-ide:latest tsc -v`
+RIDER_V=`docker run --rm -e HOST_USER_ID=$UID -e HOST_GROUP_ID=$GID bradjones/dotnet-rider:latest cat /opt/rider/build.txt`
+VSCODE_V=`docker run --rm -e HOST_USER_ID=$UID -e HOST_GROUP_ID=$GID bradjones/dotnet-vscode:latest code --version`
+
+# Build a release description to send to github
+RELEASE_DESCRIPTION="__dotnet version info__"$'\n\n'"\`\`\`$DOTNET_V"$'\n'"\`\`\`"$'\n\n'
+RELEASE_DESCRIPTION="$RELEASE_DESCRIPTION __nodejs version info__"$'\n\n'"\`\`\`"$'\n'"$NODE_V"$'\n'"\`\`\`"$'\n\n'
+RELEASE_DESCRIPTION="$RELEASE_DESCRIPTION __typescript version info__"$'\n\n'"\`\`\`"$'\n'"$TYPESCRIPT_V"$'\n'"\`\`\`"$'\n\n'
+RELEASE_DESCRIPTION="$RELEASE_DESCRIPTION __rider version info__"$'\n\n'"\`\`\`"$'\n'"$RIDER_V"$'\n'"\`\`\`"$'\n\n'
+RELEASE_DESCRIPTION="$RELEASE_DESCRIPTION __vscode version info__"$'\n\n'"\`\`\`"$'\n'"$VSCODE_V"$'\n'"\`\`\`"$'\n\n'
+
+## Download github-release cli app.
+wget https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2
+tar -jxvf linux-amd64-github-release.tar.bz2
+
+# Push a new tag for the current day
+git config --global user.email "brad@bjc.id.au"
+git config --global user.name "Brad Jones"
+git checkout master
+git tag `date +%Y.%m.%d`
+git push https://$GITHUB_TOKEN@github.com/brad-jones/dotnet-container.git master --tags
+
+# Create a new release
+echo "$RELEASE_DESCRIPTION" | ./bin/linux/amd64/github-release release \
+    --user brad-jones \
+    --repo dotnet-container \
+    --tag `date +%Y.%m.%d` \
+    --description -
+
+# Upload the docker run scripts as pseudo binaries
+./bin/linux/amd64/github-release upload \
+    --user brad-jones \
+    --repo dotnet-container \
+    --tag `date +%Y.%m.%d` \
+    --name "docker-dotnet-run.sh" \
+    --file ./bin/dotnet
+
+./bin/linux/amd64/github-release upload \
+    --user brad-jones \
+    --repo dotnet-container \
+    --tag `date +%Y.%m.%d` \
+    --name "docker-rider-run.sh" \
+    --file ./bin/rider
+
+./bin/linux/amd64/github-release upload \
+    --user brad-jones \
+    --repo dotnet-container \
+    --tag `date +%Y.%m.%d` \
+    --name "docker-code-run.sh" \
+    --file ./bin/code

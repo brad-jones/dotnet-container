@@ -1,4 +1,6 @@
 # Containers for Dotnet, VsCode & Rider
+[![Build Status](https://travis-ci.org/brad-jones/dotnet-container.svg?branch=master)](https://travis-ci.org/brad-jones/dotnet-container)
+
 Recently started working with [dotnet core 1.1](https://www.microsoft.com/net/core)
 on my Fedora 25 workstation. Problem is dotnet core is not yet offically supported
 on the latest version of Fedora. There are a few binary incompatibilities.
