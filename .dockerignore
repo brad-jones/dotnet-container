@@ -1,6 +1,7 @@
 .git
 .gitignore
 .gitattributes
+.travis.yml
 Dockerfile.dotnet
 Dockerfile.dotnet-ide
 Dockerfile.dotnet-rider

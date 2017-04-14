@@ -7,14 +7,14 @@ CMD="docker run --rm";
 # Chromium is used when we open URL's from the IDE. Ideally I would like to
 # just bind mount one of the hosts already installed browsers but so far I have
 # not had much success getting this to work.
-CMD="$CMD --privileged"
+CMD="$CMD --privileged";
 
 # Make the container run in the background. This provides a similar experience
 # to how editors like vscode normally background the main editor process once
 # it is spawned from the CLI however it does mean calls to other functionality
 # provided by the main IDE binary will either fail or appear to fail as you
 # won't see any output.
-CMD="$CMD -d"
+CMD="$CMD -d";
 
 # Setup the container to run as the same user as our host system.
 CMD="$CMD -e HOST_USER_ID=`id -u` -e HOST_GROUP_ID=`id -g` -v $HOME:/home/user";
@@ -25,23 +25,23 @@ pwd=`pwd`; CMD="$CMD -w ${pwd/$USER/user}";
 
 # Mount the hosts X11 socket into the container,
 # allowing vscode to display on our host.
-CMD="$CMD -v /tmp/.X11-unix/:/tmp/.X11-unix/ -e DISPLAY"
+CMD="$CMD -v /tmp/.X11-unix/:/tmp/.X11-unix/ -e DISPLAY";
 
 # Give the container direct access to the hosts shared memory.
 # I believe this makes things just run more efficently.
-CMD="$CMD -v /dev/shm:/dev/shm"
+CMD="$CMD -v /dev/shm:/dev/shm";
 
 # Make the container use the hosts network stack. This will ensure any web
 # applications that are run inside the container can easily be accessed from
 # the host.
-CMD="$CMD --net host"
+CMD="$CMD --net host";
 
 # Run the approriate tagged container.
 CMD="$CMD bradjones/dotnet-vscode:latest";
 
 # Execute vscode inside the container
 # Proxying all other arguments on to vscode
-CMD="$CMD code --wait $@"
+CMD="$CMD code --wait $@";
 
 # Finally execute the built command.
-$CMD
+$CMD;

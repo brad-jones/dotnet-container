@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+    - docker
+
+script: ./tasks/build
+
+after_success:
+    - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+    - ./tasks/push
