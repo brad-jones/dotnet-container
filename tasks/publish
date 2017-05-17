@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 self=$(readlink -f $0); tasks=`dirname ${self}`; projectRoot=`dirname ${tasks}`;
 
-GID=`id -g`; NEW_TAG=`date +%Y.%m.%d`;
+GID=`id -g`; NEW_TAG=`date +%Y%m%d`;
 
 # Grab version info for the various pieces of software
 echo "Reading software versions from built containers...";
@@ -57,20 +57,20 @@ sed -i "s/:latest/:$NEW_TAG/g" ./bin/code
 ./bin/linux/amd64/github-release upload \
     --user brad-jones \
     --repo dotnet-container \
-    --tag `date +%Y.%m.%d` \
+    --tag `date +%Y%m%d` \
     --name "dotnet.sh" \
     --file ./bin/dotnet
 
 ./bin/linux/amd64/github-release upload \
     --user brad-jones \
     --repo dotnet-container \
-    --tag `date +%Y.%m.%d` \
+    --tag `date +%Y%m%d` \
     --name "rider.sh" \
     --file ./bin/rider
 
 ./bin/linux/amd64/github-release upload \
     --user brad-jones \
     --repo dotnet-container \
-    --tag `date +%Y.%m.%d` \
+    --tag `date +%Y%m%d` \
     --name "code.sh" \
     --file ./bin/code
