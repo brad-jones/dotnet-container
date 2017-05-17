@@ -15,7 +15,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
         mono-complete \
         msbuild \
-        nodejs \
         chromium \
         git \
         libc6-dev \
@@ -57,7 +56,3 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
         pulseaudio && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# Install typescript, its highly likely that
-# C# and TypeScript will be used together.
-RUN npm install -g typescript

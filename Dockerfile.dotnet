@@ -1,8 +1,19 @@
 FROM microsoft/dotnet:latest
 LABEL maintainer "brad@bjc.id.au"
 
-# Install Node.js repo
+# Install the Node.js repo
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+
+# Install NodeJs it's self
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install typescript, its highly likely that
+# C# and TypeScript will be used together.
+RUN npm install -g typescript
 
 # Download and install, su-exec. https://github.com/ncopa/su-exec
 # This is a simple tool that will simply execute a program with different privileges.
