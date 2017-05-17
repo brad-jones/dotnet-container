@@ -1,9 +1,6 @@
 FROM bradjones/dotnet:latest
 LABEL maintainer "brad@bjc.id.au"
 
-# Install Node.js repo
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
-
 # Install the Xamarin Mono Repo
 # NOTE: The intention is not to target "Mono" but the the "CoreCLR".
 # Mono & MsBuild are however used for the IDE's to run things like Omnisharp, etc.
